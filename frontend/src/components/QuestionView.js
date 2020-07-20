@@ -78,7 +78,7 @@ class QuestionView extends Component {
 
   submitSearch = (searchTerm) => {
     $.ajax({
-      url: `/questions`, //TODO: update request URL
+      url: `/questions/search`, //TODO: update request URL
       type: "POST",
       dataType: 'json',
       contentType: 'application/json',
@@ -109,6 +109,7 @@ class QuestionView extends Component {
           type: "DELETE",
           success: (result) => {
             this.getQuestions();
+            alert("question deleted")
           },
           error: (error) => {
             alert('Unable to load questions. Please try your request again')
