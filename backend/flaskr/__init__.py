@@ -84,14 +84,14 @@ def create_app(test_config=None):
   @app.route('/questions')
   @cross_origin()
   def get_questions():
-    print("getting questions")
     try:
       selections = Question.query.order_by(Question.id).all()
       categories = Category.query.order_by(Category.id).all()
-      if len(categories) == 0:
-        abort(404)
       current_questions = paginate_questions(request, selections)
+      if len(current_questions) == 0:
+        abort(404)
       current_categories = [category.format() for category in categories]
+
       categories_list = {}
       for category in current_categories:
         categories_list[category['id']] = category['type']
@@ -140,10 +140,9 @@ def create_app(test_config=None):
   @cross_origin()
   def add_question():
     entry = request.get_json()
-    question = Question(question = entry["question"], answer = entry["answer"], category = entry["difficulty"], difficulty = entry["category"])
+    question = Question(question = entry["question"], answer = entry["answer"], category = entry["category"], difficulty = entry["difficulty"])
     try:
       question.insert()
-      print(question.format())
       return jsonify({
         'success': True
       })
@@ -164,7 +163,6 @@ def create_app(test_config=None):
   @cross_origin()
   def search_questions():
     search_term = request.get_json()["searchTerm"]
-    print(search_term)
     try:
       search_result = Question.query.filter(Question.question.ilike('%'+ search_term + '%')).all()
       # if len(search_result) == 0:
@@ -223,26 +221,27 @@ def create_app(test_config=None):
   def start_quiz():
     status = request.get_json()
 
-    category = status["quiz_category"]["id"]
+    category = status["quiz_category"]
     previous_questions = status["previous_questions"]
-    print("Prev: ", previous_questions)
     try:
-      if len(previous_questions) == 0:
-      # use of not logical operator "~" https://programmer.group/python-sql-alchemy-section-2-query-conditions-settings.html
-        selection = Question.query.filter(Question.category == category).all()
+      if category["type"] ==  "click":
+        if len(previous_questions) == 0:
+          selection = Question.query.all()
+        else: 
+          selection = Question.query.filter(~Question.id.in_(previous_questions)).all()
       else:
-        selection = Question.query.filter(Question.category == category).filter(~Question.id.in_(previous_questions)).all()
+        if len(previous_questions) == 0:
+        # use of not logical operator "~" https://programmer.group/python-sql-alchemy-section-2-query-conditions-settings.html
+          selection = Question.query.filter(Question.category == category["id"]).all()
+        else:
+          selection = Question.query.filter(Question.category == category["id"]).filter(~Question.id.in_(previous_questions)).all()
       if len(selection) == 0:
         random_question = False
       else:
         questions = paginate_questions(request, selection)
-        print("questions", questions)
         # pick list index randomly using randint() from https://pynative.com/python-random-choice/ 
         objectIndex = random.randint(0, len(questions)-1)
-        print(objectIndex)
-        print(len(questions))
         random_question = questions[objectIndex]
-        print(random_question)
       return jsonify({
         'success': True,
         'question': random_question
