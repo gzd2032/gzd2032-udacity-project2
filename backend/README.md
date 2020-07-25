@@ -4,7 +4,7 @@
 
 ### Installing Dependencies
 
-#### Python 3.8
+#### Python 3.8.2
 
 Follow instructions to install the latest version of python for your platform in the [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python)
 
@@ -13,11 +13,8 @@ Follow instructions to install the latest version of python for your platform in
 We recommend working within a virtual environment whenever using Python for projects. This keeps your dependencies for each project separate and organaized. Instructions for setting up a virual enviornment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
 
 example setup using virtual env
-```
-virtual env
+``` virtual env
 source ~/project/starter/env/bin/activate
-pip install -r requirements.txt
-
 ```
 
 #### PIP Dependencies
@@ -75,11 +72,11 @@ One note before you delve into your tasks: for each endpoint you are expected to
 8. Create a POST endpoint to get questions to play the quiz. This endpoint should take category and previous question parameters and return a random questions within the given category, if provided, and that is not one of the previous questions. 
 9. Create error handlers for all expected errors including 400, 404, 422 and 500. 
 
-REVIEW_COMMENT
-```
-This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code. 
+# TODO update endpoints REVIEW_COMMENT
+
 
 Endpoints
+```
 GET '/categories'
 GET '/questions?page=<int>'
 DELETE '/questions/<int:question_id>'
@@ -87,13 +84,14 @@ POST '/questions'
 POST '/questions/search'
 POST '/categories/<int:category_id>/questions'
 POST '/quizzes'
-
+```
 
 GET '/categories'
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
 - Request Arguments: None
-- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
+- Returns: An object with a single key, categories, that contains a object of key:value pairs e.g. id:category_string.
 - An example return:
+```
 {
   "categories": {
     "1": "Science", 
@@ -111,8 +109,9 @@ GET '/categories'
 
 ```
 GET '/questions?page=<int>'
-- Fetches a list of all categories, and an array of question objects that includes pagination for every 10 questions.
-- Request Arguments: Include the page number by passing a url value with the format "?page=<int>".  Excluding the page variable with default to the first page. "?page=1"
+- Fetches a list of all categories and an array of question objects that includes pagination for every 10 questions.
+- Request Arguments: Include the page number by passing a url value with the format "?page=<int>".  
+- Excluding the page variable with default to the first page. "?page=1"
 - Returns: An object with a three single key pairs (current_category: null, success:boolean, and total_questions:int), a dictionary of categories, that contains a object of id: category_string key:value pairs, a questions array of question objects with the keys "answer", "category", "difficulty", "id", and "question". 
 - An example return:
 {
@@ -153,8 +152,8 @@ DELETE '/questions/<int:question_id>'
 ```
 ```
 POST '/questions'
-- Adds a new question to the database, which requires the question, answer text, category, and difficulty score.
-- Request Arguments: pass a json object with the format {"question": (string), "answer": (string), "difficulty": (int), "category": (int)}
+- Adds a new question to the database and requires the question, answer text, category, and difficulty score.
+- Request Arguments: Pass a json object with the format {"question": (string), "answer": (string), "difficulty": (int), "category": (int)}
 - Returns: A dictionary with "success" as the key and the value as a boolean.
 - An example return:
 
@@ -165,8 +164,8 @@ POST '/questions'
 ```
 ```
 POST '/questions/search'
-- Fetches all questions that includes a substring of the search term in the question column.  The search term is not case sensitive.
-- Request Arguments: pass a json object with the key "searchTerm" and the value as a string e.g. {"searchTerm": "ss"}
+- Fetches questions that includes a substring of the search term in the question column.  The search term is not case sensitive.
+- Request Arguments: Pass a json object with the key "searchTerm" and the value as a string e.g. {"searchTerm": "ss"}
 - Returns:  An object with a three single key pairs (current_category: null, success:boolean, and total_questions:int), a questions object that is an array of question objects with the keys "answer", "category", "difficulty", "id", and "question".
 - An example return:
 
@@ -217,7 +216,7 @@ POST '/categories/<int:category_id>/questions'
 ```
 ```
 POST '/quizzes'
-- Fetches questions to play the quiz.  If the category id is 0, then the random question is selected from all categories.  If an array of previous question id's are provided, then these questions are excluded from the selection.  If there are no available questions to return, then it returns a key of "question" with a value of false. 
+- Fetches a random question from a selected category to play the quiz.  If the category id is 0, then the random question is selected from all categories.  If an array of previous question id's is provided, then these questions are excluded from the selection.  If there are no available questions to return, then it returns a key of "question" with a value of false. 
 - Request Arguments: Pass a json object with the format {"previous_questions": [(array of integers)], "quiz_category": {"type": (string), "id": (matching category id integer)}}.  For example:  {"previous_questions": [], "quiz_category": {"type": "Geography", "id": 2}}
 - Returns: An object with the key value of "success" and a question object with the keys "answer", "category", "difficulty", "id", and "question".
 - An example return:
