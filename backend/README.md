@@ -4,13 +4,21 @@
 
 ### Installing Dependencies
 
-#### Python 3.7
+#### Python 3.8
 
 Follow instructions to install the latest version of python for your platform in the [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python)
 
 #### Virtual Enviornment
 
 We recommend working within a virtual environment whenever using Python for projects. This keeps your dependencies for each project separate and organaized. Instructions for setting up a virual enviornment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
+
+example setup using virtual env
+```
+virtual env
+source ~/project/starter/env/bin/activate
+pip install -r requirements.txt
+
+```
 
 #### PIP Dependencies
 
@@ -31,8 +39,9 @@ This will install all of the required packages we selected within the `requireme
 - [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#) is the extension we'll use to handle cross origin requests from our frontend server. 
 
 ## Database Setup
-With Postgres running, restore a database using the trivia.psql file provided. From the backend folder in terminal run:
+With Postgres running, create a database name trivia, then restore a database using the trivia.psql file provided. From the backend folder in terminal run:
 ```bash
+createdb trivia
 psql trivia < trivia.psql
 ```
 
@@ -72,20 +81,158 @@ This README is missing documentation of your endpoints. Below is an example for 
 
 Endpoints
 GET '/categories'
-GET ...
-POST ...
-DELETE ...
+GET '/questions?page=<int>'
+DELETE '/questions/<int:question_id>'
+POST '/questions'
+POST '/questions/search'
+POST '/categories/<int:category_id>/questions'
+POST '/quizzes'
+
 
 GET '/categories'
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
 - Request Arguments: None
 - Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
-{'1' : "Science",
-'2' : "Art",
-'3' : "Geography",
-'4' : "History",
-'5' : "Entertainment",
-'6' : "Sports"}
+- An example return:
+{
+  "categories": {
+    "1": "Science", 
+    "2": "Art", 
+    "3": "Geography", 
+    "4": "History", 
+    "5": "Entertainment", 
+    "6": "Sports"
+  }, 
+  "success": true
+}
+
+```
+
+
+```
+GET '/questions?page=<int>'
+- Fetches a list of all categories, and an array of question objects that includes pagination for every 10 questions.
+- Request Arguments: Include the page number by passing a url value with the format "?page=<int>".  Excluding the page variable with default to the first page. "?page=1"
+- Returns: An object with a three single key pairs (current_category: null, success:boolean, and total_questions:int), a dictionary of categories, that contains a object of id: category_string key:value pairs, a questions array of question objects with the keys "answer", "category", "difficulty", "id", and "question". 
+- An example return:
+{
+  "categories": {
+    "1": "Science", 
+    "2": "Art", 
+    "3": "Geography", 
+    "4": "History", 
+    "5": "Entertainment", 
+    "6": "Sports"
+  }, 
+  "current_category": "", 
+  "questions": [
+   {
+      "answer": "Escher", 
+      "category": 2, 
+      "difficulty": 1, 
+      "id": 16, 
+      "question": "Which Dutch graphic artist\u2013initials M C was a creator of optical illusions?"
+    }
+  ], 
+  "success": true, 
+  "total_questions": 16
+}
+
+```
+```
+DELETE '/questions/<int:question_id>'
+- Deletes a question based on the question id.
+- Request Arguments: Pass an integer in the format "/questions/<int>"
+- Returns: A dictionary with "success" as the key and the value as a boolean.
+- An example return:
+
+{
+  'success': True
+}
+
+```
+```
+POST '/questions'
+- Adds a new question to the database, which requires the question, answer text, category, and difficulty score.
+- Request Arguments: pass a json object with the format {"question": (string), "answer": (string), "difficulty": (int), "category": (int)}
+- Returns: A dictionary with "success" as the key and the value as a boolean.
+- An example return:
+
+{
+  'success': True
+}
+
+```
+```
+POST '/questions/search'
+- Fetches all questions that includes a substring of the search term in the question column.  The search term is not case sensitive.
+- Request Arguments: pass a json object with the key "searchTerm" and the value as a string e.g. {"searchTerm": "ss"}
+- Returns:  An object with a three single key pairs (current_category: null, success:boolean, and total_questions:int), a questions object that is an array of question objects with the keys "answer", "category", "difficulty", "id", and "question".
+- An example return:
+
+{
+  "current_category": "", 
+  "questions": [
+    {
+      "answer": "Muhammad Ali", 
+      "category": 4, 
+      "difficulty": 1, 
+      "id": 9, 
+      "question": "What boxer's original name is Cassius Clay?"
+    }, 
+    {
+      "answer": "Jackson Pollock", 
+      "category": 2, 
+      "difficulty": 2, 
+      "id": 19, 
+      "question": "Which American artist was a pioneer of Abstract Expressionism, and a leading exponent of action painting?"
+    }
+  ], 
+  "success": true, 
+  "total_questions": 2
+}
+
+```
+```
+POST '/categories/<int:category_id>/questions'
+- Fetches an array of dictionaries of all questions that have particular category id.
+- Request Arguments: Pass an integer in the format "/categories/<int:category_id>/questions" to the url string.
+- Returns: An object with the properties "current_category", "success", "total_questions", and a questions object that is an array of question objects with the keys "answer", "category", "difficulty", "id", and "question".
+
+{
+  "current_category": 5, 
+  "questions": [
+    {
+      "answer": "Apollo 13", 
+      "category": 5, 
+      "difficulty": 4, 
+      "id": 2, 
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    }
+  ], 
+  "success": true, 
+  "total_questions": 1
+}
+
+```
+```
+POST '/quizzes'
+- Fetches questions to play the quiz.  If the category id is 0, then the random question is selected from all categories.  If an array of previous question id's are provided, then these questions are excluded from the selection.  If there are no available questions to return, then it returns a key of "question" with a value of false. 
+- Request Arguments: Pass a json object with the format {"previous_questions": [(array of integers)], "quiz_category": {"type": (string), "id": (matching category id integer)}}.  For example:  {"previous_questions": [], "quiz_category": {"type": "Geography", "id": 2}}
+- Returns: An object with the key value of "success" and a question object with the keys "answer", "category", "difficulty", "id", and "question".
+- An example return:
+
+{
+  "question": {
+    "answer": "Agra", 
+    "category": 3, 
+    "difficulty": 2, 
+    "id": 15, 
+    "question": "The Taj Mahal is located in which Indian city?"
+  }, 
+  "success": true
+}
+
 
 ```
 

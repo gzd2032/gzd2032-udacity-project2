@@ -37,13 +37,6 @@ def create_app(test_config=None):
     return response
 
 
-  @app.route('/')
-  @cross_origin()
-  def home_app():
-    return jsonify({
-      'success': True,
-      'questions': '1'
-    })
 
   '''
   @TODO: 
@@ -63,8 +56,8 @@ def create_app(test_config=None):
         list_of_categories[ category["id"] ] = category["type"]
     
       return jsonify({
-        'success': True,
-        'categories': list_of_categories
+        "success": True,
+        "categories": list_of_categories
       })
     except:
       abort(400)
@@ -94,14 +87,14 @@ def create_app(test_config=None):
 
       categories_list = {}
       for category in current_categories:
-        categories_list[category['id']] = category['type']
+        categories_list[category["id"]] = category["type"]
 
       return jsonify({
-        'success': True,
-        'questions': current_questions,
-        'total_questions': len(selections),
-        'current_category': 'current_category',
-        'categories': categories_list
+        "success": True,
+        "questions": current_questions,
+        "total_questions": len(selections),
+        "current_category": "",
+        "categories": categories_list
       })
     except:
       abort(400)
@@ -121,7 +114,7 @@ def create_app(test_config=None):
       selection.delete()
 
       return jsonify({
-        'success': True
+        "success": True
       })
     except:
       abort(400)
@@ -144,7 +137,7 @@ def create_app(test_config=None):
     try:
       question.insert()
       return jsonify({
-        'success': True
+        "success": True
       })
     except:
       abort(400)
@@ -164,15 +157,15 @@ def create_app(test_config=None):
   def search_questions():
     search_term = request.get_json()["searchTerm"]
     try:
-      search_result = Question.query.filter(Question.question.ilike('%'+ search_term + '%')).all()
+      search_result = Question.query.filter(Question.question.ilike("%"+ search_term + "%")).all()
       # if len(search_result) == 0:
       #   abort(404)
       questions = paginate_questions(request, search_result)
       return jsonify({
-        'success': True,
-        'questions': questions,
-        'total_questions': len(search_result),
-        'current_category': 'current_category'
+        "success": True,
+        "questions": questions,
+        "total_questions": len(search_result),
+        "current_category": ""
       })
     except:
       abort(400)
@@ -186,7 +179,7 @@ def create_app(test_config=None):
   categories in the left column will cause only questions of that 
   category to be shown. 
   '''
-  @app.route('/categories/<int:category_id>/questions')
+  @app.route('/categories/<int:category_id>/questions', methods=['POST'])
   @cross_origin()
   def get_by_category(category_id):
     try:
@@ -195,10 +188,10 @@ def create_app(test_config=None):
         abort(404)
       current_questions = paginate_questions(request, selection)
       return jsonify({
-        'success': True,
-        'questions': current_questions,
-        'total_questions': len(selection),
-        'current_category': category_id
+        "success": True,
+        "questions": current_questions,
+        "total_questions": len(selection),
+        "current_category": category_id
       })
 
     except:
@@ -220,7 +213,6 @@ def create_app(test_config=None):
   @cross_origin()
   def start_quiz():
     status = request.get_json()
-
     category = status["quiz_category"]
     previous_questions = status["previous_questions"]
     try:
@@ -243,8 +235,8 @@ def create_app(test_config=None):
         objectIndex = random.randint(0, len(questions)-1)
         random_question = questions[objectIndex]
       return jsonify({
-        'success': True,
-        'question': random_question
+        "success": True,
+        "question": random_question
       })
 
     except:

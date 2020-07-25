@@ -62,7 +62,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["success"], True)
         self.assertTrue(data["questions"])
         self.assertTrue(data["total_questions"])
-        self.assertTrue(data["current_category"])
+        self.assertEqual(data["current_category"], "")
         self.assertTrue(data["categories"])
 
     def test_get_page_questions(self):
@@ -73,7 +73,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data["success"], True)
         self.assertTrue(data["total_questions"])
-        self.assertTrue(data["current_category"])
+        self.assertEqual(data["current_category"], "")
         self.assertTrue(data["categories"])
         self.assertTrue(data["questions"])        
 
@@ -139,12 +139,12 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data["questions"])
         self.assertTrue(data["total_questions"])
-        self.assertTrue(data["current_category"])
+        self.assertEqual(data["current_category"], "")
 
     def test_get_category_questions(self):
         """Test getting questions based on the category"""
         category = "3"
-        res = self.client().get("/categories/"+ category + "/questions")
+        res = self.client().post("/categories/"+ category + "/questions")
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -155,7 +155,7 @@ class TriviaTestCase(unittest.TestCase):
     def test_get_category_questions_error(self):
         """Test getting questions based on the category"""
         category = "99"
-        res = self.client().get("/categories/"+ category + "/questions")
+        res = self.client().post("/categories/"+ category + "/questions")
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 400)
