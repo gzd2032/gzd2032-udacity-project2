@@ -260,7 +260,7 @@ Error Code: 404
       "success": False,
       "error": 404,
       "message": "Resource Not Found"
-    }
+}
 ```
 
 Error Code: 405
@@ -272,7 +272,7 @@ Error Code: 405
       "success": False,
       "error": 405,
       "message": "Method Not Allowed"
-    }
+}
 ```
 
 Error Code: 422
@@ -284,7 +284,7 @@ Error Code: 422
       "success": False,
       "error": 422,
       "message": "unable to process data"
-    }
+}
 ```
 
 Error Code: 500
@@ -296,7 +296,7 @@ Error Code: 500
       "success": False,
       "error": 500,
       "message": "Server Error"
-    }
+}
 ```
 
 
