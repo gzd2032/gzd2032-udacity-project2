@@ -235,7 +235,7 @@ POST '/quizzes'
 
 ## Error Handlers
 
-End point operations that result in an error will return the standard HTML error response codes.  4xx for client submission error and 5xx for server function error.
+End point operations that result in an error will return the standard HTML error response codes:  4xx for client submission error and 5xx for server function error.
 
 Error codes
 
