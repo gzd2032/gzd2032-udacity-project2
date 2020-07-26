@@ -255,7 +255,8 @@ Error Code: 404
 - The server was not able to find the requested data on the server.  e.g. Client tried to query database items taht did not exist.
 - Message: Resource Not Found
 - Response: Json object
-```{
+```
+{
       "success": False,
       "error": 404,
       "message": "Resource Not Found"
@@ -266,7 +267,8 @@ Error Code: 405
 - The client attempted an invalid method on the endpoint.  e.g. Attempted POST method on a GET only endpoint.
 - Message: Method Not Allowed
 - Response: Json object
-```{
+```
+{
       "success": False,
       "error": 405,
       "message": "Method Not Allowed"
@@ -277,7 +279,8 @@ Error Code: 422
 - The server was not able to process the data submitted by the client even though the syntax and format was correct.  e.g. The client submitted invalid data types when adding a new question to the database.
 - Message: Unable to process data
 - Response: Json object
-```{
+```
+{
       "success": False,
       "error": 422,
       "message": "unable to process data"
@@ -288,7 +291,8 @@ Error Code: 500
 - There was an error in the server when it attempted to process the client's request.  e.g. Client tried to query an endpoint that does not exist, and the server didn't know how to handle it.
 - Message: Server Error
 - Response: Json object
-```{
+```
+{
       "success": False,
       "error": 500,
       "message": "Server Error"
